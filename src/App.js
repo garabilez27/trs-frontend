@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Products from './pages/Products';
+import ProductForm from './pages/ProductForm';
+import PrivateRoute from './components/PrivateRoute';
+import { removeToken, isLoggedIn } from './utils/auth';
 
 function App() {
+  const logout = () => {
+    removeToken();
+    window.location.href = '/';
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+
+        {/* {isLoggedIn() ? (
+          <>
+            <button onClick={logout}>Logout</button>
+          </>
+        ) : (
+          <>
+            
+          </>
+        )} */}
+
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/products" element={
+          <PrivateRoute><Products /></PrivateRoute>
+        } />
+
+        <Route path="/products/add" element={
+          <PrivateRoute><ProductForm /></PrivateRoute>
+        } />
+
+        <Route path="/products/edit/:id" element={
+          <PrivateRoute><ProductForm /></PrivateRoute>
+        } />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 
