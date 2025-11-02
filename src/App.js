@@ -29,6 +29,11 @@ function Wrapper() {
 }
 
 function App() {
+  const logout = () => {
+    removeToken();
+    window.location.href = '/';
+  };
+
   return (
     <BrowserRouter>
       <Routes>
