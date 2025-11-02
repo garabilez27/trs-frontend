@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/api"; 
 import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Products() {
-  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -19,6 +19,7 @@ export default function Products() {
 
       setProducts(data.data || []);
       setTotalPages(data.last_page || 1);
+      setPageSize(data.per_page || data.data.length || 10); // <-- dynamic page size
     } catch (error) {
       console.error("Failed to fetch products:", error);
       setProducts([]);
@@ -30,7 +31,7 @@ export default function Products() {
 
   useEffect(() => {
     fetchProducts();
-  }, [page]);
+  });
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
@@ -87,7 +88,7 @@ export default function Products() {
           ) : (
             products.map((p, index) => (
               <tr key={p.id} className="border-b hover:bg-gray-50">
-                <td className="py-2 px-4">{(page - 1) * products.length + (index + 1)}</td>
+                <td className="py-2 px-4">{(page - 1) * pageSize + (index + 1)}</td>
                 <td className="py-2 px-4">{p.name}</td>
                 <td className="py-2 px-4">{p.description || "-"}</td>
                 <td className="py-2 px-4">{p.quantity}</td>
