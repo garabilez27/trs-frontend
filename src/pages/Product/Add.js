@@ -11,11 +11,18 @@ export default function AddProduct() {
   const handleAdd = async (data) => {
     setLoading(true);
     try {
-      await api.post("/products", data);
-      alert("Product added successfully!");
-      navigate("/products");
+      const res = await api.post("/products", data);
+
+      // Accept both 200 OK and 201 Created as success
+      if (res.status === 200 || res.status === 201) {
+        alert("Product added successfully!");
+        navigate("/products");
+      } else {
+        console.warn("Unexpected status:", res.status);
+        alert("Something went wrong, please try again.");
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Add product error:", err.response || err);
       alert("Failed to add product.");
     } finally {
       setLoading(false);
