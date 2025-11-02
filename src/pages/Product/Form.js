@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export default function ProductForm({ initialData = {}, onSubmit, loading = false }) {
-  console.log(initialData);
+  
   const [form, setForm] = useState({
     name: initialData.name || "",
     description: initialData.description || "",

@@ -85,9 +85,9 @@ export default function Products() {
               </td>
             </tr>
           ) : (
-            products.map((p) => (
+            products.map((p, index) => (
               <tr key={p.id} className="border-b hover:bg-gray-50">
-                <td className="py-2 px-4">{p.id}</td>
+                <td className="py-2 px-4">{(page - 1) * products.length + (index + 1)}</td>
                 <td className="py-2 px-4">{p.name}</td>
                 <td className="py-2 px-4">{p.description || "-"}</td>
                 <td className="py-2 px-4">{p.quantity}</td>
