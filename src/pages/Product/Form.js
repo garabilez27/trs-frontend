@@ -48,6 +48,10 @@ export default function ProductForm({ initialData = {}, onSubmit, loading = fals
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
 
+      <h2 className="text-2xl font-bold text-center text-gray-800">
+        {initialData.name ? "Edit Product" : "New Product"}
+      </h2>
+
       <div>
         <label className="block mb-1 font-semibold" htmlFor="name">
           Name <span className="text-red-500">*</span>
