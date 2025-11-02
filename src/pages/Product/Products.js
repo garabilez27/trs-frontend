@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import api from "../../api/api"; 
@@ -11,7 +11,8 @@ export default function Products() {
   const [loading, setLoading] = useState(false);
   const [pageSize, setPageSize] = useState(10);
 
-  const fetchProducts = async () => {
+  // Wrap fetchProducts in useCallback to prevent unnecessary re-creation
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get(`/products?page=${page}`);
@@ -19,7 +20,7 @@ export default function Products() {
 
       setProducts(data.data || []);
       setTotalPages(data.last_page || 1);
-      setPageSize(data.per_page || data.data.length || 10); // <-- dynamic page size
+      setPageSize(data.per_page || data.data.length || 10);
     } catch (error) {
       console.error("Failed to fetch products:", error);
       setProducts([]);
@@ -27,11 +28,11 @@ export default function Products() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page]); // page is a dependency here
 
   useEffect(() => {
-    fetchProducts();
-  });
+    fetchProducts(); // safe to call
+  }, [fetchProducts]); // now only depends on stable fetchProducts
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
@@ -75,13 +76,13 @@ export default function Products() {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={5} className="text-center py-8 text-gray-500">
+              <td colSpan={6} className="text-center py-8 text-gray-500">
                 Loading products...
               </td>
             </tr>
           ) : products.length === 0 ? (
             <tr>
-              <td colSpan={5} className="text-center py-8 text-gray-500">
+              <td colSpan={6} className="text-center py-8 text-gray-500">
                 No products found.
               </td>
             </tr>
