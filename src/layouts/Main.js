@@ -26,7 +26,7 @@ export default function Main({ children }) {
     const fetchUser = async () => {
       const token = getToken();
       if (!token) {
-        navigate("/login");
+        navigate("/");
         return;
       }
 
@@ -39,7 +39,7 @@ export default function Main({ children }) {
       } catch (err) {
         console.error(err);
         removeToken();
-        navigate("/login");
+        navigate("/");
       }
     };
 
