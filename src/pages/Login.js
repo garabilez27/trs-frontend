@@ -21,45 +21,74 @@ export default function Login() {
       if (!token) throw new Error('Token not found in response');
 
       saveToken(token);
-      navigate('/products');
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || err.message || 'Login failed');
+      alert('Invalid Credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-full bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form className="space-y-4" onSubmit={submit}>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={form.email} 
-            onChange={e => setForm({...form, email:e.target.value})} 
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={form.password}
-            onChange={e => setForm({...form, password:e.target.value})}
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-            disabled={loading}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <form
+                onSubmit={submit}
+                className="bg-white p-8 rounded shadow-md w-full max-w-sm"
+                >
+                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+
+                <div className="mb-4">
+                    <label className="block mb-1 font-semibold" htmlFor="email">
+                    Email
+                    </label>
+                    <input
+                    id="email"
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+
+                <div className="mb-6">
+                    <label className="block mb-1 font-semibold" htmlFor="password">
+                    Password
+                    </label>
+                    <input
+                    id="password"
+                    type="password"
+                    required
+                    value={form.password}
+                    onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-2 rounded text-white ${
+                    loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                    } transition`}
+                >
+                    {loading ? 'Logging in...' : 'Login'}
+                </button>
+
+                <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600">
+                    Don’t have an account?{' '}
+                    <button
+                        type="button"
+                        onClick={() => navigate('/register')}
+                        className="text-blue-600 hover:underline font-semibold"
+                    >
+                        Create Account
+                    </button>
+                    </p>
+                </div>
+            </form>
+        </div>
+    );
 }
